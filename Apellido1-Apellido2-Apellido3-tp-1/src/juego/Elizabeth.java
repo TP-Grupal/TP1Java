@@ -41,9 +41,9 @@ public class Elizabeth {
 		this.rayoEli = Herramientas.cargarImagen("Imagenes\\rayo.png");
 		return new Rayo(rayoEli, this.x, this.y, 0, 0.1, 10);
 	}
-	public void mover()
+	public void moverY()
 	{
-		this.y = this.y + this.velocidad;
+		this.y = this.y + 190;
 	}
 	public void up() {
 		this.velocidad = this.velocidad * (-1);
