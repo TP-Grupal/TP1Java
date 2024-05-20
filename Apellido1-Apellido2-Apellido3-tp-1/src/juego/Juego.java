@@ -136,7 +136,11 @@ public class Juego extends InterfaceJuego {
 		}
 		
 		//--------
-		
+		if(this.entorno.sePresiono(this.entorno.TECLA_IZQUIERDA) || 
+				this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA)){
+			if(up() == true && saltar() == true)
+				this.elizabeth.moverY();
+		}
 		
 		//creo el rayo
 		
@@ -193,7 +197,23 @@ public class Juego extends InterfaceJuego {
 		else 
 			return true;
 	}
-	
+	private boolean up() {
+		if(this.entorno.sePresiono(this.TECLA_X)){
+			return true;
+		}
+		return false;
+	}
+	private boolean saltar() {
+		boolean posX = false, posY = false;
+		
+		for(int i = 0; i < this.ladrillos.length; i++) {
+			if(this.ladrillos[i].getX() + this.ladrillos[i].getDiametro() > this.elizabeth.getX())
+				posX = true;
+			if(this.ladrillos[i].getY() + this.ladrillos[i].getDiametro() < this.elizabeth.getY() + this.elizabeth.getDiametro())
+				posY = true;
+		}					
+		return posX && posY;
+	}
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
