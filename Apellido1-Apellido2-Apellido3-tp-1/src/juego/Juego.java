@@ -126,12 +126,12 @@ public class Juego extends InterfaceJuego {
 		//guarda la última dirección de Elizabeth para saber hacia dónde disparar el rayo
 		if(entorno.sePresiono(entorno.TECLA_DERECHA) || entorno.estaPresionada(entorno.TECLA_DERECHA)) {
 			if(this.hayRayo == false) {
-				this.elizabeth.ultDirec = 1;
+				this.elizabeth.setUltDirec(1);
 			}
 		}
 		else if(entorno.sePresiono(entorno.TECLA_IZQUIERDA) || entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
 			if(this.hayRayo == false) {
-				this.elizabeth.ultDirec = 2;
+				this.elizabeth.setUltDirec(2);
 			}
 		}
 		
