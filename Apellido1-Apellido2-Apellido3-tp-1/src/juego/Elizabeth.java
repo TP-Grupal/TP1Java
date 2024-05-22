@@ -12,7 +12,7 @@ public class Elizabeth {
 	private double diametro;
 	private Image rayoEli;
 	private int velocidad;
-	int ultDirec;
+	private int ultDirec;
 
 	public Elizabeth(Image img ,int x, int y, double angulo, double diametro, int velocidad,int ultDirec) {
 		this.img = Herramientas.cargarImagen("Imagenes\\elizabeth.png");
@@ -85,7 +85,10 @@ public class Elizabeth {
     public void setDiametro(double diametro) {
         this.diametro = diametro;
     }
-	public int getUltDirec() {
-		return ultDirec;
-	}
+    public int getUltDirec() {
+	return ultDirec;
+    }
+    public void setUltDirec(int ultDirec) {
+	this.ultDirec = ultDirec;
+    }
 }
