@@ -14,6 +14,7 @@ public class Juego extends InterfaceJuego {
 
 	// Variables y métodos propios de cada grupo
 	private Elizabeth elizabeth;
+	private Dinosaurio dinosaurio;
 	private Image reina;
 	private Rayo[] rayos;
 	private int direccion;
@@ -30,6 +31,7 @@ public class Juego extends InterfaceJuego {
 
 		// Inicializar lo que haga falta para el juego
 		this.elizabeth = new Elizabeth(this.reina ,500, 500, 0, 0.4,0, direccion);
+		this.dinosaurio = new Dinosaurio(500,100,50,50,2);
 		this.rayos= new Rayo[1];
 		this.ladrillos = new BloquesLadrillos[25];
 		for(int i = 0; i < this.ladrillos.length; i++) {
@@ -186,6 +188,24 @@ public class Juego extends InterfaceJuego {
 					this.hayRayo= false;
 				}
 			}
+		}
+		this.dinosaurio.dibujar(entorno);
+		this.dinosaurio.mover();
+		boolean swich = true;
+		if (this.dinosaurio.getX() <= 0 +  dinosaurio.getAncho()/2 || this.dinosaurio.getX() >= 1000 - dinosaurio.getAncho() ) {
+			this.dinosaurio.rebotar();			
+		}
+		if(this.dinosaurio.vivo() == true) {			
+			for(int i = 0; i < this.ladrillos.length; i++) {				
+				if(this.dinosaurio.getY() >= this.ladrillos[i].getY() - 50&& this.dinosaurio.getY() <= this.ladrillos[i].getY() + 50
+				&& this.dinosaurio.getX() >= this.ladrillos[i].getX() - 80&& this.dinosaurio.getX() <= this.ladrillos[i].getX() + 80) {
+					swich = false;				
+			    }	
+			}
+			if(swich == true) {
+				this.dinosaurio.Gravedadsi();
+			}
+		  }	
 		}
 	}
 	
