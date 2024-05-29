@@ -43,10 +43,11 @@ public class Elizabeth {
 	}
 	public void moverY()
 	{
-		this.y = this.y + 190;
-	}
-	public void up() {
-		this.velocidad = this.velocidad * (-1);
+		int i = 0;
+		while(i < this.alto) {
+			this.y -= 3*i;
+			i++;
+		}
 	}
 	
 	public int getX() {
