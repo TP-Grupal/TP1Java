@@ -234,7 +234,44 @@ public class Juego extends InterfaceJuego {
 		}					
 		return posX && posY;
 	}
-
+	private boolean ColisionPrincesaAbajo(BloquesLadrillos ladrillo) {
+		boolean col= false;
+		int posInfElizabeth = this.elizabeth.getY() + this.elizabeth.getAlto()/2;
+		int posDerElizabeth = this.elizabeth.getX() + this.elizabeth.getAncho() /2;
+		int posIzqElizabeth = this.elizabeth.getX() - this.elizabeth.getAncho()/2;
+		int posSupElizabeth = this.elizabeth.getY() - this.elizabeth.getAlto() /2;
+		
+		int posSupladrillo = ladrillo.getY() - ladrillo.getAlto()/2 +1;
+		int posDerladrillo = ladrillo.getX() + ladrillo.getAncho() /2 +1;
+		int posIzqladrillo = ladrillo.getX() - ladrillo.getAncho()/2 +1;
+		int posInfladrillo = ladrillo.getY() + ladrillo.getAlto() /2 +1;
+		
+		if(posDerElizabeth < posIzqladrillo && posIzqElizabeth < posIzqladrillo ||
+				posDerElizabeth > posDerladrillo && posIzqElizabeth > posDerladrillo)
+			col = false;
+		else if(posSupElizabeth == posInfladrillo)
+			col = true;
+		return col;
+	}
+	private boolean ColisionPrincesaArriba(BloquesLadrillos ladrillo) {
+		boolean col= false;
+		int posInfElizabeth = this.elizabeth.getY() + this.elizabeth.getAlto()/2;
+		int posDerElizabeth = this.elizabeth.getX() + this.elizabeth.getAncho() /2;
+		int posIzqElizabeth = this.elizabeth.getX() - this.elizabeth.getAncho()/2;
+		int posSupElizabeth = this.elizabeth.getY() - this.elizabeth.getAlto() /2;
+		
+		int posSupladrillo = ladrillo.getY() - ladrillo.getAlto()/2 +1;
+		int posDerladrillo = ladrillo.getX() + ladrillo.getAncho() /2 +1;
+		int posIzqladrillo = ladrillo.getX() - ladrillo.getAncho()/2 +1;
+		int posInfladrillo = ladrillo.getY() + ladrillo.getAlto() /2 +1;
+		
+		if(posDerElizabeth < posIzqladrillo && posIzqElizabeth < posIzqladrillo ||
+				posDerElizabeth > posDerladrillo && posIzqElizabeth > posDerladrillo)
+			col = false;
+		else if(posInfElizabeth == posSupladrillo)
+			col = true;
+		return col;
+	}
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		Juego juego = new Juego();
