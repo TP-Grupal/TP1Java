@@ -16,24 +16,37 @@ public class Juego extends InterfaceJuego {
 	private Elizabeth elizabeth;
 	private Dinosaurio dinosaurio;
 	private Image reina;
-	private Rayo[] rayos;
+	private Image dino;
 	private int direccion;
 	boolean hayRayo;
 	public char TECLA_X = 88;
 	private BloquesLadrillos[] ladrillos;
 	private BloquesAcero[] acero;
 	private Image pared;
-
+	private Menu menu;
+	
+	//rayos elizabeth y bola dinosaurio
+	private Rayo[] rayoElizabeth;
+	private Rayo[] rayoDinosaurio;
+	
+	
 	Juego() {
+		this.menu = new Menu();
+	
 		Random rand = new Random();
 		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, " Super Elizabeth Sis, Volcano Edition - Grupo ... - v1", 1000, 600);
-
+		
+		this.ladrillos = new BloquesLadrillos[25];
+		
 		// Inicializar lo que haga falta para el juego
 		this.elizabeth = new Elizabeth(this.reina ,500, 500, 0, 0.4,0, direccion);
-		this.dinosaurio = new Dinosaurio(500,100,50,50,2);
-		this.rayos= new Rayo[1];
-		this.ladrillos = new BloquesLadrillos[25];
+		this.dinosaurio = new Dinosaurio(this.dino,500,100,0,0.6,2);
+		
+		//rayo y bola
+		this.rayoElizabeth= new Rayo[1];
+		this.rayoDinosaurio= new Rayo[1];
+		
 		for(int i = 0; i < this.ladrillos.length; i++) {
 			if(i == 0)
 				this.ladrillos[i] = new BloquesLadrillos(this.pared,50,570,0,0.3);
@@ -108,121 +121,204 @@ public class Juego extends InterfaceJuego {
 	 * del TP para mayor detalle).
 	 */
 	public void tick() {
-		// Procesamiento de un instante de tiempo
-		this.elizabeth.dibujarImg(this.entorno);
-		
-		for(int i = 0; i < this.ladrillos.length; i++) {
-			this.ladrillos[i].dibujarImg(this.entorno);
-		}
-		for(int i = 0; i < this.acero.length; i++) {
-			this.acero[i].dibujarImg(this.entorno);
-		}
-		
-		if(this.entorno.estaPresionada(this.entorno.TECLA_DERECHA) && 
-				this.elizabeth.getX() + this.elizabeth.getDiametro() /2 < this.entorno.ancho())
-			this.elizabeth.moverDerecha();
-		if(this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA) && 
-				this.elizabeth.getX() + this.elizabeth.getDiametro() /2 > 45)
-			this.elizabeth.moverIzquierda();
-		
-		//guarda la última dirección de Elizabeth para saber hacia dónde disparar el rayo
-		if(entorno.sePresiono(entorno.TECLA_DERECHA) || entorno.estaPresionada(entorno.TECLA_DERECHA)) {
-			if(this.hayRayo == false) {
-				this.elizabeth.setUltDirec(1);
+		if (menu.estaEnMenu()) {
+            menu.dibujarFondo(entorno); // Dibuja el fondo antes de los elementos del menú
+            menu.dibujarTitulo(entorno); // Dibuja el titulo del juego 
+            menu.dibujarElementosMenu(entorno); // Agrega las opciones del juego
+
+            // Escucha las teclas para cambiar al estado de juego principal
+            if (this.entorno.estaPresionada(this.entorno.TECLA_ENTER)) {
+                menu.cambiarEstado();
+            }
+        } else {
+			// Procesamiento de un instante de tiempo
+        	
+        	//dibujo personajes
+			this.elizabeth.dibujarImg(this.entorno);
+			this.dinosaurio.dibujarImg(entorno);
+			
+			//dibujo ladrilolos
+			
+			for(int i = 0; i < this.ladrillos.length; i++) {
+				this.ladrillos[i].dibujarImg(this.entorno);
 			}
-		}
-		else if(entorno.sePresiono(entorno.TECLA_IZQUIERDA) || entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
-			if(this.hayRayo == false) {
-				this.elizabeth.setUltDirec(2);
+			for(int i = 0; i < this.acero.length; i++) {
+				this.acero[i].dibujarImg(this.entorno);
 			}
-		}
-		
-		//--------
-		if(this.entorno.sePresiono(this.entorno.TECLA_IZQUIERDA) || 
-				this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA)){
-			if(up() == true && saltar() == true)
-				this.elizabeth.moverY();
-		}
-		
-		//creo el rayo
-		
-		if(entorno.sePresiono(entorno.TECLA_ESPACIO) && (entorno.sePresiono(entorno.TECLA_DERECHA) 
-				|| this.hayRayo== false)) {
-			this.hayRayo= true;
-			for(int i =0; i < rayos.length; i++) {
-				if(rayos[i] == null) {
-					this.rayos[i]= this.elizabeth.disparar();
+			
+			if(this.entorno.estaPresionada(this.entorno.TECLA_DERECHA) && 
+					this.elizabeth.getX() + this.elizabeth.getDiametro() /2 < this.entorno.ancho())
+				this.elizabeth.moverDerecha();
+			if(this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA) && 
+					this.elizabeth.getX() + this.elizabeth.getDiametro() /2 > 45)
+				this.elizabeth.moverIzquierda();
+			
+			//guarda la última dirección de Elizabeth para saber hacia dónde disparar el rayo
+			if(entorno.sePresiono(entorno.TECLA_DERECHA) || entorno.estaPresionada(entorno.TECLA_DERECHA)) {
+				if(this.hayRayo == false) {
+					this.elizabeth.setUltDirec(1);
 				}
 			}
-		}
-		if(entorno.sePresiono(entorno.TECLA_ESPACIO) && (entorno.sePresiono(entorno.TECLA_IZQUIERDA) 
-				|| this.hayRayo== false )) {
-			this.hayRayo= true;
-			for(int i =0; i < rayos.length; i++) {
-				if(rayos[i] == null) {
-					this.rayos[i]= this.elizabeth.disparar();
+			else if(entorno.sePresiono(entorno.TECLA_IZQUIERDA) || entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
+				if(this.hayRayo == false) {
+					this.elizabeth.setUltDirec(2);
 				}
 			}
-		}
-		
-		/*
-		 * dibuja el rayo segun la direccion en la que se esta moviendo Elizabeth
-		  */
-		
-		for(int i = 0; i < rayos.length; i++) {
-			if(rayos[i] != null && elizabeth.getUltDirec() == 1 ) {
-				rayos[i].dibujarImg(entorno);
-				rayos[i].moverDerecha();
-				if(!hayRayo(rayos[i])) {
-					rayos[i] = null;
-					this.hayRayo= false;
+			
+			//--------
+			if(this.entorno.sePresiono(this.entorno.TECLA_IZQUIERDA) || 
+					this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA)){
+				if(up() == true && saltar() == true)
+					this.elizabeth.moverY();
+			}
+			
+			//creo el rayo para la princesa
+			
+			if(entorno.sePresiono(entorno.TECLA_ESPACIO) && (entorno.sePresiono(entorno.TECLA_DERECHA) 
+					|| this.hayRayo== false)) {
+				this.hayRayo= true;
+				for(int i =0; i < rayoElizabeth.length; i++) {
+					if(rayoElizabeth[i] == null) {
+						this.rayoElizabeth[i]= this.elizabeth.disparar();
+					}
 				}
 			}
-		}
-		for(int i = 0; i < rayos.length; i++) {
-			if(rayos[i] != null && elizabeth.getUltDirec() == 2) {
-				rayos[i].dibujarImg(entorno);
-				rayos[i].moverIzquierda();
-				if(!hayRayo(rayos[i])) {
-					rayos[i] = null;
-					this.hayRayo= false;
+			if(entorno.sePresiono(entorno.TECLA_ESPACIO) && (entorno.sePresiono(entorno.TECLA_IZQUIERDA) 
+					|| this.hayRayo== false )) {
+				this.hayRayo= true;
+				for(int i =0; i < rayoElizabeth.length; i++) {
+					if(rayoElizabeth[i] == null) {
+						this.rayoElizabeth[i]= this.elizabeth.disparar();
+					}
 				}
 			}
-		}
-		this.dinosaurio.dibujar(entorno);
-		this.dinosaurio.mover();
-		boolean swich = true;
-		if (this.dinosaurio.getX() <= 0 +  dinosaurio.getAncho()/2 || this.dinosaurio.getX() >= 1000 - dinosaurio.getAncho() ) {
-			this.dinosaurio.rebotar();			
-		}
-		if(this.dinosaurio.vivo() == true) {			
-			for(int i = 0; i < this.ladrillos.length; i++) {				
-				if(this.dinosaurio.getY() >= this.ladrillos[i].getY() - 50&& this.dinosaurio.getY() <= this.ladrillos[i].getY() + 50
-				&& this.dinosaurio.getX() >= this.ladrillos[i].getX() - 80&& this.dinosaurio.getX() <= this.ladrillos[i].getX() + 80) {
-					swich = false;				
-			    }	
+			
+			/*
+			 * dibuja el rayo segun la direccion en la que se esta moviendo Elizabeth
+			  */
+			
+			for(int i = 0; i < rayoElizabeth.length; i++) {
+				if(rayoElizabeth[i] != null && elizabeth.getUltDirec() == 1 ) {
+					rayoElizabeth[i].dibujarImg(entorno);
+					rayoElizabeth[i].moverDerecha();
+					if(!hayRayo(rayoElizabeth[i])) {
+						rayoElizabeth[i] = null;
+						this.hayRayo= false;
+					}
+				}
 			}
-			if(swich == true) {
-				this.dinosaurio.Gravedadsi();
+			for(int i = 0; i < rayoElizabeth.length; i++) {
+				if(rayoElizabeth[i] != null && elizabeth.getUltDirec() == 2) {
+					rayoElizabeth[i].dibujarImg(entorno);
+					rayoElizabeth[i].moverIzquierda();
+					if(!hayRayo(rayoElizabeth[i])) {
+						rayoElizabeth[i] = null;
+						this.hayRayo= false;
+					}
+				}
 			}
-		  }	
-		}
-	}
+			
+			// ** parte del dinosaurio **
+			
+			this.dinosaurio.mover();
+			boolean swich = true;
+			if (this.dinosaurio.getX() <= 0 +  dinosaurio.getAncho()/2 || this.dinosaurio.getX() >= 1000 - dinosaurio.getAncho() ) {
+				this.dinosaurio.rebotar();		
+			}
+			if(this.dinosaurio.vivo() == true) {			
+				for(int i = 0; i < this.ladrillos.length; i++) {				
+					if(this.dinosaurio.getY() >= this.ladrillos[i].getY() - 50&& this.dinosaurio.getY() <= this.ladrillos[i].getY() + 50
+					&& this.dinosaurio.getX() >= this.ladrillos[i].getX() - 80&& this.dinosaurio.getX() <= this.ladrillos[i].getX() + 80) {
+						
+						swich = false;				
+				    }
+				}
+				if(swich == true) {
+					this.dinosaurio.Gravedadsi();
+				}
+			  }	
 	
-	//---fin del tick()---
-		 
+			// creo bola dinosaurio
+			if (dinosaurio.getVelocidad() > 0) { // Si la velocidad es mayor que 0, el dinosaurio se está moviendo hacia la derecha
+			    this.hayRayo = true;
+			    for (int i = 0; i < rayoDinosaurio.length; i++) {
+			        if (rayoDinosaurio[i] == null) {
+			            this.rayoDinosaurio[i] = this.dinosaurio.dispararDinosaurio();
+			        }
+			    }
+			} else if (dinosaurio.getVelocidad() < 0) { // Si la velocidad es menor que 0, el dinosaurio se está moviendo hacia la izquierda
+			    this.hayRayo = true;
+			    for (int i = 0; i < rayoDinosaurio.length; i++) {
+			        if (rayoDinosaurio[i] == null) {
+			            this.rayoDinosaurio[i] = this.dinosaurio.dispararDinosaurio();
+			        }
+			    }
+			}
+			
+			// dibuja la bola del dinosaurio segun su direccion dinosaurio
+			
+			for(int i = 0; i < rayoDinosaurio.length; i++) {
+			    if(rayoDinosaurio[i] != null && dinosaurio.moverDerecha() > 0 ) {
+			        rayoDinosaurio[i].dibujarImg(entorno);
+			        rayoDinosaurio[i].moverIzquierda();
+			        if(!hayRayo(rayoDinosaurio[i])) {
+			            rayoDinosaurio[i] = null;
+			            this.hayRayo= false;
+			        }
+			    }
+			}
+			for(int i = 0; i < rayoDinosaurio.length; i++) {
+			    if(rayoDinosaurio[i] != null && dinosaurio.moverIzquierda() < 0) {
+			        rayoDinosaurio[i].dibujarImg(entorno);
+			        rayoDinosaurio[i].moverDerecha(); // Aquí se ajusta el movimiento del rayo
+			        if(!hayRayo(rayoDinosaurio[i])) {
+			            rayoDinosaurio[i] = null;
+			            this.hayRayo= false;
+			        }
+			    }
+			}
+			
+			// salto princesa
+					if (this.entorno.sePresiono(TECLA_X) && this.saltar()) {
+						this.elizabeth.saltar();
+					}
+					if (!this.saltar()) {
+						this.elizabeth.aplicoGravedad();
+					}
+			
+			for (int i = 0; i < this.ladrillos.length; i++) {
+			        // Verificar colisión abajo
+			        if (ColisionPrincesaAbajo(this.ladrillos[i])) {
+			        		
+			            this.elizabeth.rebotar();// si toca la parte de abajo, tengo que detener el salton y hacer un tipo rebote hacia abajo
+			        }
+			        
+			        // Verificar colisión arriba
+			        if (ColisionPrincesaArriba(this.ladrillos[i])) {
+			            this.elizabeth.detenerSalto(); // si toca la parte de arriba solo detengo el salto y listo, despues camina normalmente 
+			            }
+			        }
+        }
+
+		}
+		
+		
+		//---fin del tick()---
+			 
 	private boolean hayRayo(Rayo rayo) {
 		if(rayo.getX() + rayo.getEscala() /2 <= 0 || rayo.getX() - rayo.getEscala() /2 >= entorno.ancho())
 			return false;
 		else 
 			return true;
 	}
+	
 	private boolean up() {
 		if(this.entorno.sePresiono(this.TECLA_X)){
 			return true;
 		}
 		return false;
 	}
+	
 	private boolean saltar() {
 		boolean posX = false, posY = false;
 		
@@ -234,6 +330,7 @@ public class Juego extends InterfaceJuego {
 		}					
 		return posX && posY;
 	}
+	
 	private boolean ColisionPrincesaAbajo(BloquesLadrillos ladrillo) {
 		boolean col= false;
 		int posInfElizabeth = this.elizabeth.getY() + this.elizabeth.getAlto()/2;
@@ -253,6 +350,7 @@ public class Juego extends InterfaceJuego {
 			col = true;
 		return col;
 	}
+	
 	private boolean ColisionPrincesaArriba(BloquesLadrillos ladrillo) {
 		boolean col= false;
 		int posInfElizabeth = this.elizabeth.getY() + this.elizabeth.getAlto()/2;
@@ -271,7 +369,9 @@ public class Juego extends InterfaceJuego {
 		else if(posInfElizabeth == posSupladrillo)
 			col = true;
 		return col;
+		
 	}
+	
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		Juego juego = new Juego();
