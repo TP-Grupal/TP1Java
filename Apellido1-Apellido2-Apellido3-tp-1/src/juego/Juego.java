@@ -28,7 +28,7 @@ public class Juego extends InterfaceJuego {
 	//rayos elizabeth y bola dinosaurio
 	private Rayo[] rayoElizabeth;
 	private Rayo[] rayoDinosaurio;
-	
+	boolean hayBola;
 	
 	Juego() {
 		this.menu = new Menu();
@@ -233,6 +233,15 @@ public class Juego extends InterfaceJuego {
 						swich = false;				
 				    }
 				}
+				for(int i = 0; i < this.acero.length; i++) {
+					if(this.dinosaurio.getY() >= this.acero[i].getY() - 50 && 
+							this.dinosaurio.getY() <= this.acero[i].getY() + 50
+					&& this.dinosaurio.getX() >= this.acero[i].getX() - 80 && 
+					this.dinosaurio.getX() <= this.acero[i].getX() + 80) {
+						
+						swich = false;				
+				    }
+				}
 				if(swich == true) {
 					this.dinosaurio.Gravedadsi();
 				}
@@ -240,14 +249,14 @@ public class Juego extends InterfaceJuego {
 	
 			// creo bola dinosaurio
 			if (dinosaurio.getVelocidad() > 0) { // Si la velocidad es mayor que 0, el dinosaurio se está moviendo hacia la derecha
-			    this.hayRayo = true;
+			    this.hayBola = true;
 			    for (int i = 0; i < rayoDinosaurio.length; i++) {
 			        if (rayoDinosaurio[i] == null) {
 			            this.rayoDinosaurio[i] = this.dinosaurio.dispararDinosaurio();
 			        }
 			    }
 			} else if (dinosaurio.getVelocidad() < 0) { // Si la velocidad es menor que 0, el dinosaurio se está moviendo hacia la izquierda
-			    this.hayRayo = true;
+			    this.hayBola = true;
 			    for (int i = 0; i < rayoDinosaurio.length; i++) {
 			        if (rayoDinosaurio[i] == null) {
 			            this.rayoDinosaurio[i] = this.dinosaurio.dispararDinosaurio();
@@ -273,34 +282,12 @@ public class Juego extends InterfaceJuego {
 			        rayoDinosaurio[i].moverDerecha(); // Aquí se ajusta el movimiento del rayo
 			        if(!hayRayo(rayoDinosaurio[i])) {
 			            rayoDinosaurio[i] = null;
-			            this.hayRayo= false;
+			            //this.hayRayo= false;
 			        }
 			    }
 			}
 			
-			// salto princesa
-					if (this.entorno.sePresiono(TECLA_X) && this.saltar()) {
-						this.elizabeth.saltar();
-					}
-					if (!this.saltar()) {
-						this.elizabeth.aplicoGravedad();
-					}
-			
-			for (int i = 0; i < this.ladrillos.length; i++) {
-			        // Verificar colisión abajo
-			        if (ColisionPrincesaAbajo(this.ladrillos[i])) {
-			        		
-			            this.elizabeth.rebotar();// si toca la parte de abajo, tengo que detener el salton y hacer un tipo rebote hacia abajo
-			        }
-			        
-			        // Verificar colisión arriba
-			        if (ColisionPrincesaArriba(this.ladrillos[i])) {
-			            this.elizabeth.detenerSalto(); // si toca la parte de arriba solo detengo el salto y listo, despues camina normalmente 
-			            }
-			        }
         }
-
-		}
 		
 		
 		//---fin del tick()---
