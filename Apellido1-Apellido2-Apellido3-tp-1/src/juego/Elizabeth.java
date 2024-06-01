@@ -14,15 +14,23 @@ package juego;
 		private int velocidad;
 		private int ultDirec;
 		private int gravedad;
-		
-		
+	
 		private int alto;
 		private int ancho;
 		
 		//salto princesa
 		private double velocidadY;
+
+		private int gravedad;
+		private int alturaMaxSalto;
+		private int limiteSalto;
 		
-		public Elizabeth(Image img ,int x, int y, double angulo, double diametro, int velocidad,int ultDirec) {
+		//imagen movimiento
+		private Image movDer;
+		private Image movIzq;
+		private Image porDefecto;
+		
+		public Elizabeth(Image porDefecto ,int x, int y, double angulo, double diametro, int velocidad,int ultDirec) {
 			this.img = Herramientas.cargarImagen("Imagenes\\elizabeth.png");
 			this.x = x;
 			this.y = y;
@@ -37,6 +45,9 @@ package juego;
 			
 			//salto princesa
 			this.velocidadY = 0; // velocidad salto
+			this.gravedad = 6;
+			this.alturaMaxSalto = y;
+			this.limiteSalto = y - 200;
 		}
 		public void dibujarImg(Entorno entorno)
 		{
@@ -47,11 +58,15 @@ package juego;
 		public void moverDerecha()
 		{
 			this.x = this.x + 3;
+			this.movDer = Herramientas.cargarImagen("Imagenes\\mov-der.gif");
+			this.porDefecto = this.movDer;
 		}
 		
 		public void moverIzquierda()
 		{
 			this.x = this.x - 3;
+			this.movIzq = Herramientas.cargarImagen("Imagenes\\mov-izq.gif");
+			this.porDefecto = this.movIzq;
 		}
 		public Rayo disparar() {
 			this.rayoEli = Herramientas.cargarImagen("Imagenes\\rayo.png");
@@ -109,8 +124,17 @@ package juego;
 	    }
 	    
 	    //salto princesa
+	    
 	    public void saltar() {
+	    	if (this.y >= this.limiteSalto){
+	    		this.velocidadY = -5;
+	    		this.alturaMaxSalto = this.y;
+	    	}
 	    	this.velocidadY = -5; //velocidad con la que se produce el salto
+	    }
+	    
+	    public int saltar2() { 
+	    	return this.y = this.y - 5;
 	    }
 	    
 	    public void aplicoGravedad() {
