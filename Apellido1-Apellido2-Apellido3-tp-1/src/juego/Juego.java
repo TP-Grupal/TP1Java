@@ -322,7 +322,13 @@ public class Juego extends InterfaceJuego {
 			return true;
 	}
 	
-	
+	private boolean saltar() {
+		
+		if(this.elizabeth.getY() == 500)
+			return true;
+		else
+			return false;
+	}
 	
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
