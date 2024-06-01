@@ -25,6 +25,9 @@ public class Juego extends InterfaceJuego {
 	private Image pared;
 	private Menu menu;
 	
+	//salto princesa
+	private int pasoSalto;
+	
 	//rayos elizabeth y bola dinosaurio
 	private Rayo[] rayoElizabeth;
 	private Rayo[] rayoDinosaurio;
@@ -168,8 +171,8 @@ public class Juego extends InterfaceJuego {
 			//--------
 			if(this.entorno.sePresiono(this.entorno.TECLA_IZQUIERDA) || 
 					this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA)){
-				if(up() == true && saltar() == true)
-					this.elizabeth.moverY();
+				//if(up() == true && saltar() == true)
+				//	this.elizabeth.moverY();
 			}
 			
 			//creo el rayo para la princesa
@@ -216,6 +219,26 @@ public class Juego extends InterfaceJuego {
 						this.hayRayo= false;
 					}
 				}
+			}
+			boolean swichP = this.pasoSalto == 0;			
+			for(int i = 0; i < this.ladrillos.length; i++) {				
+				if(this.elizabeth.getY() >= this.ladrillos[i].getY() - 80 && this.elizabeth.getY() <= this.ladrillos[i].getY() + 50
+				&& this.elizabeth.getX() >= this.ladrillos[i].getX() - 80 && this.elizabeth.getX() <= this.ladrillos[i].getX() + 80) {
+						
+					swichP = false;				
+			    }
+			}
+			if(swichP == true) {
+				this.elizabeth.gravedadPrincesa();
+			}
+		
+			if(this.entorno.sePresiono(TECLA_X) && swichP == false) {
+				this.pasoSalto = 20;
+			}
+			
+			if(pasoSalto > 0) {
+				this.elizabeth.saltar2();
+				this.pasoSalto--;
 			}
 			
 			// ** parte del dinosaurio **
@@ -289,7 +312,7 @@ public class Juego extends InterfaceJuego {
 			
         }
 		
-		
+	}	
 		//---fin del tick()---
 			 
 	private boolean hayRayo(Rayo rayo) {
@@ -299,65 +322,7 @@ public class Juego extends InterfaceJuego {
 			return true;
 	}
 	
-	private boolean up() {
-		if(this.entorno.sePresiono(this.TECLA_X)){
-			return true;
-		}
-		return false;
-	}
 	
-	private boolean saltar() {
-		boolean posX = false, posY = false;
-		
-		for(int i = 0; i < this.ladrillos.length; i++) {
-			if(this.ladrillos[i].getX() + this.ladrillos[i].getDiametro() > this.elizabeth.getX())
-				posX = true;
-			if(this.ladrillos[i].getY() + this.ladrillos[i].getDiametro() < this.elizabeth.getY() + this.elizabeth.getDiametro())
-				posY = true;
-		}					
-		return posX && posY;
-	}
-	
-	private boolean ColisionPrincesaAbajo(BloquesLadrillos ladrillo) {
-		boolean col= false;
-		int posInfElizabeth = this.elizabeth.getY() + this.elizabeth.getAlto()/2;
-		int posDerElizabeth = this.elizabeth.getX() + this.elizabeth.getAncho() /2;
-		int posIzqElizabeth = this.elizabeth.getX() - this.elizabeth.getAncho()/2;
-		int posSupElizabeth = this.elizabeth.getY() - this.elizabeth.getAlto() /2;
-		
-		int posSupladrillo = ladrillo.getY() - ladrillo.getAlto()/2 +1;
-		int posDerladrillo = ladrillo.getX() + ladrillo.getAncho() /2 +1;
-		int posIzqladrillo = ladrillo.getX() - ladrillo.getAncho()/2 +1;
-		int posInfladrillo = ladrillo.getY() + ladrillo.getAlto() /2 +1;
-		
-		if(posDerElizabeth < posIzqladrillo && posIzqElizabeth < posIzqladrillo ||
-				posDerElizabeth > posDerladrillo && posIzqElizabeth > posDerladrillo)
-			col = false;
-		else if(posSupElizabeth == posInfladrillo)
-			col = true;
-		return col;
-	}
-	
-	private boolean ColisionPrincesaArriba(BloquesLadrillos ladrillo) {
-		boolean col= false;
-		int posInfElizabeth = this.elizabeth.getY() + this.elizabeth.getAlto()/2;
-		int posDerElizabeth = this.elizabeth.getX() + this.elizabeth.getAncho() /2;
-		int posIzqElizabeth = this.elizabeth.getX() - this.elizabeth.getAncho()/2;
-		int posSupElizabeth = this.elizabeth.getY() - this.elizabeth.getAlto() /2;
-		
-		int posSupladrillo = ladrillo.getY() - ladrillo.getAlto()/2 +1;
-		int posDerladrillo = ladrillo.getX() + ladrillo.getAncho() /2 +1;
-		int posIzqladrillo = ladrillo.getX() - ladrillo.getAncho()/2 +1;
-		int posInfladrillo = ladrillo.getY() + ladrillo.getAlto() /2 +1;
-		
-		if(posDerElizabeth < posIzqladrillo && posIzqElizabeth < posIzqladrillo ||
-				posDerElizabeth > posDerladrillo && posIzqElizabeth > posDerladrillo)
-			col = false;
-		else if(posInfElizabeth == posSupladrillo)
-			col = true;
-		return col;
-		
-	}
 	
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
