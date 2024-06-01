@@ -32,6 +32,10 @@ public class Juego extends InterfaceJuego {
 	private Rayo[] rayoElizabeth;
 	private Rayo[] rayoDinosaurio;
 	boolean hayBola;
+
+	//imagenes princesa
+	private Image der;
+	private Image izq;
 	
 	Juego() {
 		this.menu = new Menu();
@@ -43,7 +47,7 @@ public class Juego extends InterfaceJuego {
 		this.ladrillos = new BloquesLadrillos[25];
 		
 		// Inicializar lo que haga falta para el juego
-		this.elizabeth = new Elizabeth(this.reina ,500, 500, 0, 0.4,0, direccion);
+		this.elizabeth = new Elizabeth(this.der ,500, 500, 0, 0.4,0, direccion);
 		this.dinosaurio = new Dinosaurio(this.dino,500,100,0,0.6,2);
 		
 		//rayo y bola
