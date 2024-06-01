@@ -313,7 +313,16 @@ public class Juego extends InterfaceJuego {
 			        }
 			    }
 			}
-			
+			for(int i = 0;i<this.rayoDinosaurio.length; i++) {
+					if(this.rayoDinosaurio[i] != null) {
+						if(this.rayoDinosaurio[i].getX() >= this.elizabeth.getX() - 50 &&
+							this.rayoDinosaurio[i].getX() <= this.elizabeth.getX() + 50 &&
+							this.rayoDinosaurio[i].getY() >= this.elizabeth.getY() - 50 &&
+							this.rayoDinosaurio[i].getY() <= this.elizabeth.getY() + 50) {
+							this.elizabeth = new Elizabeth(this.reina ,500, 500, 0, 0.4,0, direccion);
+						}
+					}			
+			}			
         }
 		
 	}	
