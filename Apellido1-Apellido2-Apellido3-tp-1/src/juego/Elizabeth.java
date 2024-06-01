@@ -13,6 +13,7 @@ package juego;
 		private Image rayoEli;
 		private int velocidad;
 		private int ultDirec;
+		private int gravedad;
 		
 		
 		private int alto;
@@ -29,6 +30,7 @@ package juego;
 			this.diametro = diametro;
 			this.velocidad = velocidad;
 			this.ultDirec = ultDirec;
+			this.gravedad = 6;
 			
 			this.alto = alto;
 			this.ancho = ancho;
@@ -138,8 +140,11 @@ package juego;
 		public int getAncho() {
 			return ancho;
 		}
-	    
+		public void gravedadPrincesa() {
+		    this.y = this.y + gravedad;
+		}
+		 public int saltar2() { 
+		    	return this.y = this.y - 5;
+		}
 	    
 }
-	
-	
