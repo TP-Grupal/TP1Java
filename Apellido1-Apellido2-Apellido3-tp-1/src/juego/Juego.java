@@ -32,23 +32,19 @@ public class Juego extends InterfaceJuego {
 	private Rayo[] rayoElizabeth;
 	private Rayo[] rayoDinosaurio;
 	boolean hayBola;
-
-	//imagenes princesa
-	private Image der;
-	private Image izq;
 	
 	Juego() {
 		this.menu = new Menu();
 	
-		Random rand = new Random();
+		 Random rand = new Random();
 		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, " Super Elizabeth Sis, Volcano Edition - Grupo ... - v1", 1000, 600);
 		
 		this.ladrillos = new BloquesLadrillos[25];
 		
 		// Inicializar lo que haga falta para el juego
-		this.elizabeth = new Elizabeth(this.der ,500, 500, 0, 0.4,0, direccion);
-		this.dinosaurio = new Dinosaurio(this.dino,500,100,0,0.6,2);
+		this.elizabeth = new Elizabeth(this.reina ,500, 500, 0, 0.3,0, direccion);
+		this.dinosaurio = new Dinosaurio(this.dino,500,100,0,0.4,2);
 		
 		//rayo y bola
 		this.rayoElizabeth= new Rayo[1];
@@ -147,17 +143,20 @@ public class Juego extends InterfaceJuego {
 			//dibujo ladrilolos
 			
 			for(int i = 0; i < this.ladrillos.length; i++) {
-				this.ladrillos[i].dibujarImg(this.entorno);
+				if(this.ladrillos[i]!= null) {
+					this.ladrillos[i].dibujarImg(this.entorno);
+				}
+				
 			}
 			for(int i = 0; i < this.acero.length; i++) {
 				this.acero[i].dibujarImg(this.entorno);
 			}
 			
 			if(this.entorno.estaPresionada(this.entorno.TECLA_DERECHA) && 
-					this.elizabeth.getX() + this.elizabeth.getDiametro() /2 < this.entorno.ancho())
+					this.elizabeth.getX() + this.elizabeth.getAncho() /2 < this.entorno.ancho())
 				this.elizabeth.moverDerecha();
 			if(this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA) && 
-					this.elizabeth.getX() + this.elizabeth.getDiametro() /2 > 45)
+					this.elizabeth.getX() + this.elizabeth.getAncho() /2 > 45)
 				this.elizabeth.moverIzquierda();
 			
 			//guarda la última dirección de Elizabeth para saber hacia dónde disparar el rayo
@@ -199,11 +198,8 @@ public class Juego extends InterfaceJuego {
 					}
 				}
 			}
-			
-			/*
-			 * dibuja el rayo segun la direccion en la que se esta moviendo Elizabeth
-			  */
-			
+		
+			// dibuja el rayo segun la direccion en la que se esta moviendo Elizabeth
 			for(int i = 0; i < rayoElizabeth.length; i++) {
 				if(rayoElizabeth[i] != null && elizabeth.getUltDirec() == 1 ) {
 					rayoElizabeth[i].dibujarImg(entorno);
@@ -226,20 +222,41 @@ public class Juego extends InterfaceJuego {
 			}
 			boolean swichP = this.pasoSalto == 0;			
 			for(int i = 0; i < this.ladrillos.length; i++) {				
-				if(this.elizabeth.getY() >= this.ladrillos[i].getY() - 80 && this.elizabeth.getY() <= this.ladrillos[i].getY() + 50
-				&& this.elizabeth.getX() >= this.ladrillos[i].getX() - 80 && this.elizabeth.getX() <= this.ladrillos[i].getX() + 80) {
-						
+				if(this.ladrillos[i] != null &&
+				   this.elizabeth.getY() >= this.ladrillos[i].getY() - this.ladrillos[i].getAlto() &&
+				   this.elizabeth.getY() <= this.ladrillos[i].getY() + this.ladrillos[i].getAlto() &&
+				   this.elizabeth.getX() >= this.ladrillos[i].getX() - this.ladrillos[i].getAncho() &&
+				   this.elizabeth.getX() <= this.ladrillos[i].getX() + this.ladrillos[i].getAncho()) {	
 					swichP = false;				
 			    }
 			}
 			if(swichP == true) {
 				this.elizabeth.gravedadPrincesa();
 			}
-		
-			if(this.entorno.sePresiono(TECLA_X) && swichP == false) {
-				this.pasoSalto = 20;
-			}
+			//Romper bloques
+			for(int i = 0; i < this.ladrillos.length; i++) {				
+				if(this.ladrillos[i] != null &&
+				   this.elizabeth.getY()  <= this.ladrillos[i].getY() + this.ladrillos[i].getAlto()&&
+			       this.elizabeth.getY()  >= this.ladrillos[i].getY() + this.ladrillos[i].getAlto()- 20 &&
+				   this.elizabeth.getX() >= this.ladrillos[i].getX() - this.ladrillos[i].getAncho()&&
+				   this.elizabeth.getX() <= this.ladrillos[i].getX() + this.ladrillos[i].getAncho()) {
+					
+					this.ladrillos[i] = null;
+					this.pasoSalto = 0;
+			    }
 			
+		
+		   }
+			if(this.entorno.sePresiono(TECLA_X) &&
+			   swichP == false) {
+				
+						this.pasoSalto = 40;
+						System.out.println("B");
+						
+					}
+					
+			
+	
 			if(pasoSalto > 0) {
 				this.elizabeth.saltar2();
 				this.pasoSalto--;
@@ -254,19 +271,23 @@ public class Juego extends InterfaceJuego {
 			}
 			if(this.dinosaurio.vivo() == true) {			
 				for(int i = 0; i < this.ladrillos.length; i++) {				
-					if(this.dinosaurio.getY() >= this.ladrillos[i].getY() - 50&& this.dinosaurio.getY() <= this.ladrillos[i].getY() + 50
-					&& this.dinosaurio.getX() >= this.ladrillos[i].getX() - 80&& this.dinosaurio.getX() <= this.ladrillos[i].getX() + 80) {
+					if(this.ladrillos[i] != null &&
+					   this.dinosaurio.getY() >= this.ladrillos[i].getY() - this.ladrillos[i].getAlto()&&
+					   this.dinosaurio.getY() <= this.ladrillos[i].getY() + this.ladrillos[i].getAlto()&&
+					   this.dinosaurio.getX() >= this.ladrillos[i].getX() - this.ladrillos[i].getAncho()&&
+					   this.dinosaurio.getX() <= this.ladrillos[i].getX() + this.ladrillos[i].getAncho()) {
 						
-						swich = false;				
+						  swich = false;				
 				    }
 				}
 				for(int i = 0; i < this.acero.length; i++) {
-					if(this.dinosaurio.getY() >= this.acero[i].getY() - 50 && 
-							this.dinosaurio.getY() <= this.acero[i].getY() + 50
-					&& this.dinosaurio.getX() >= this.acero[i].getX() - 80 && 
-					this.dinosaurio.getX() <= this.acero[i].getX() + 80) {
+					if(this.acero[i] != null &&
+					   this.dinosaurio.getY() >= this.acero[i].getY() - this.acero[i].getAlto() && 
+					   this.dinosaurio.getY() <= this.acero[i].getY() + this.acero[i].getAlto() && 
+					   this.dinosaurio.getX() >= this.acero[i].getX() - this.acero[i].getAncho() && 
+					   this.dinosaurio.getX() <= this.acero[i].getX() + this.acero[i].getAncho()) {
 						
-						swich = false;				
+						 swich = false;				
 				    }
 				}
 				if(swich == true) {
@@ -313,19 +334,18 @@ public class Juego extends InterfaceJuego {
 			        }
 			    }
 			}
-			for(int i = 0;i<this.rayoDinosaurio.length; i++) {
+				for(int i = 0;i<this.rayoDinosaurio.length; i++) {
 					if(this.rayoDinosaurio[i] != null) {
-						if(this.rayoDinosaurio[i].getX() >= this.elizabeth.getX() - 50 &&
-							this.rayoDinosaurio[i].getX() <= this.elizabeth.getX() + 50 &&
-							this.rayoDinosaurio[i].getY() >= this.elizabeth.getY() - 50 &&
-							this.rayoDinosaurio[i].getY() <= this.elizabeth.getY() + 50) {
-							this.elizabeth = new Elizabeth(this.reina ,500, 500, 0, 0.4,0, direccion);
+						if(this.rayoDinosaurio[i].getX() >= this.elizabeth.getX() - this.elizabeth.getAncho() &&
+							this.rayoDinosaurio[i].getX() <= this.elizabeth.getX() + this.elizabeth.getAncho() &&
+							this.rayoDinosaurio[i].getY() >= this.elizabeth.getY() - this.elizabeth.getAlto() &&
+							this.rayoDinosaurio[i].getY() <= this.elizabeth.getY() + this.elizabeth.getAlto()) {
+							this.elizabeth = new Elizabeth(this.reina ,500, 500, 0, 0.3,0, direccion);
 						}
 					}			
-			}			
-        }
-		
-	}	
+			}	
+        }		
+	}
 		//---fin del tick()---
 			 
 	private boolean hayRayo(Rayo rayo) {
@@ -335,13 +355,7 @@ public class Juego extends InterfaceJuego {
 			return true;
 	}
 	
-	private boolean saltar() {
-		
-		if(this.elizabeth.getY() == 500)
-			return true;
-		else
-			return false;
-	}
+	
 	
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
