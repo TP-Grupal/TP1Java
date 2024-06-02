@@ -14,23 +14,15 @@ package juego;
 		private int velocidad;
 		private int ultDirec;
 		private int gravedad;
-	
+		
+		
 		private int alto;
 		private int ancho;
 		
-		//salto princesa
-		private double velocidadY;
-
-		private int gravedad;
-		private int alturaMaxSalto;
-		private int limiteSalto;
 		
-		//imagen movimiento
-		private Image movDer;
-		private Image movIzq;
-		private Image porDefecto;
 		
-		public Elizabeth(Image porDefecto ,int x, int y, double angulo, double diametro, int velocidad,int ultDirec) {
+		public Elizabeth(Image img ,int x, int y, double angulo, double diametro, int velocidad,int ultDirec) {
+			
 			this.img = Herramientas.cargarImagen("Imagenes\\elizabeth.png");
 			this.x = x;
 			this.y = y;
@@ -39,34 +31,24 @@ package juego;
 			this.velocidad = velocidad;
 			this.ultDirec = ultDirec;
 			this.gravedad = 6;
-			
-			this.alto = alto;
-			this.ancho = ancho;
-			
-			//salto princesa
-			this.velocidadY = 0; // velocidad salto
-			this.gravedad = 6;
-			this.alturaMaxSalto = y;
-			this.limiteSalto = y - 200;
+			//tamaño princesa
+			this.alto = 70;
+			this.ancho = 50;
 		}
 		public void dibujarImg(Entorno entorno)
 		{
-			this.y = (int) (this.y + velocidadY);
+			
 			entorno.dibujarImagen(this.img,this.x, this.y, this.angulo, this.diametro);
 		}
 		
 		public void moverDerecha()
 		{
 			this.x = this.x + 3;
-			this.movDer = Herramientas.cargarImagen("Imagenes\\mov-der.gif");
-			this.porDefecto = this.movDer;
 		}
 		
 		public void moverIzquierda()
 		{
 			this.x = this.x - 3;
-			this.movIzq = Herramientas.cargarImagen("Imagenes\\mov-izq.gif");
-			this.porDefecto = this.movIzq;
 		}
 		public Rayo disparar() {
 			this.rayoEli = Herramientas.cargarImagen("Imagenes\\rayo.png");
@@ -122,42 +104,6 @@ package juego;
 	    public void setUltDirec(int ultDirec) {
 		this.ultDirec = ultDirec;
 	    }
-	    
-	    //salto princesa
-	    
-	    public void saltar() {
-	    	if (this.y >= this.limiteSalto){
-	    		this.velocidadY = -5;
-	    		this.alturaMaxSalto = this.y;
-	    	}
-	    	this.velocidadY = -5; //velocidad con la que se produce el salto
-	    }
-	    
-	    public int saltar2() { 
-	    	return this.y = this.y - 5;
-	    }
-	    
-	    public void aplicoGravedad() {
-	    	double gravedad = 0.8;
-	    	double velocidadCaida = 5; //velocidad con la que cae la princesa
-	    	
-	    	this.velocidadY = this.velocidadY + gravedad;
-	    	System.out.println("vel y: "+velocidadY);
-	    	if (this.velocidadY > velocidadCaida) {
-	    		this.velocidadY = velocidadCaida;
-	    	}
-	    	this.y = (int) (this.y + this.velocidadY);
-	    }
-	    
-	    // para dejar de saltar
-	    public void detenerSalto() {
-	        this.velocidadY = 0; // pongo velocidadY =0 para que no salte
-	    }
-	    
-	    // para rebotar
-	    public void rebotar() {
-	        this.velocidadY = -10; // velocidad negativa para hacer que rebote
-	    }
 		public int getAlto() {
 			return alto;
 		}
@@ -172,3 +118,5 @@ package juego;
 		}
 	    
 }
+	
+	
