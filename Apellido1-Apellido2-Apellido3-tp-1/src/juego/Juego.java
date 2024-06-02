@@ -220,14 +220,16 @@ public class Juego extends InterfaceJuego {
 					}
 				}
 			}
-			boolean swichP = this.pasoSalto == 0;			
+			boolean swichP = this.pasoSalto == 0;
+			boolean saltoActivo = true;
 			for(int i = 0; i < this.ladrillos.length; i++) {				
 				if(this.ladrillos[i] != null &&
 				   this.elizabeth.getY() >= this.ladrillos[i].getY() - this.ladrillos[i].getAlto() &&
 				   this.elizabeth.getY() <= this.ladrillos[i].getY() + this.ladrillos[i].getAlto() &&
 				   this.elizabeth.getX() >= this.ladrillos[i].getX() - this.ladrillos[i].getAncho() &&
 				   this.elizabeth.getX() <= this.ladrillos[i].getX() + this.ladrillos[i].getAncho()) {	
-					swichP = false;				
+					swichP = false;	
+					saltoActivo = false;
 			    }
 			}
 			if(swichP == true) {
@@ -244,24 +246,16 @@ public class Juego extends InterfaceJuego {
 					this.ladrillos[i] = null;
 					this.pasoSalto = 0;
 			    }
-			
-		
 		   }
-			if(this.entorno.sePresiono(TECLA_X) &&
-			   swichP == false) {
-				
-						this.pasoSalto = 40;
-						System.out.println("B");
-						
-					}
-					
 			
-	
+			if(this.entorno.sePresiono(TECLA_X) &&  saltoActivo == false) {
+				saltoActivo = true;
+				this.pasoSalto = 40;	
+			}
 			if(pasoSalto > 0) {
 				this.elizabeth.saltar2();
-				this.pasoSalto--;
+				this.pasoSalto--;	
 			}
-			
 			// ** parte del dinosaurio **
 			
 			this.dinosaurio.mover();
