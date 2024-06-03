@@ -24,7 +24,7 @@ public class Juego extends InterfaceJuego {
 	private BloquesAcero[] acero;
 	private Image pared;
 	private Menu menu;
-	
+	public char TECLA_ESCAPE = 27;
 	//salto princesa
 	private int pasoSalto;
 	
@@ -34,13 +34,12 @@ public class Juego extends InterfaceJuego {
 	boolean hayBola;
 	
 	Juego() {
-		this.menu = new Menu();
-	
-		 Random rand = new Random();
+		this.menu = new Menu(dino);
+		Random rand = new Random();
 		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, " Super Elizabeth Sis, Volcano Edition - Grupo ... - v1", 1000, 600);
 		
-		this.ladrillos = new BloquesLadrillos[25];
+		this.ladrillos = new BloquesLadrillos[69];
 		
 		// Inicializar lo que haga falta para el juego
 		this.elizabeth = new Elizabeth(this.reina ,500, 500, 0, 0.3,0, direccion);
@@ -49,59 +48,21 @@ public class Juego extends InterfaceJuego {
 		//rayo y bola
 		this.rayoElizabeth= new Rayo[1];
 		this.rayoDinosaurio= new Rayo[1];
-		
-		for(int i = 0; i < this.ladrillos.length; i++) {
-			if(i == 0)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,50,570,0,0.3);
-			else if(i == 1)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,145,570,0,0.3);
-			else if(i == 2)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,240,570,0,0.3);
-			else if(i == 3)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,335,570,0,0.3);
-			else if(i == 4)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,385,570,0,0.3);
-			else if(i == 5)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,475,570,0,0.3);
-			else if(i == 6)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,569,570,0,0.3);
-			else if(i == 7)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,665,570,0,0.3);
-			else if(i == 8)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,760,570,0,0.3);
-			else if(i == 9)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,855,570,0,0.3);
-			else if(i == 10)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,50,380,0,0.3);
-			else if(i == 11)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,145,380,0,0.3);
-			else if(i == 12)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,240,380,0,0.3);
-			else if(i == 13)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,530,380,0,0.3);
-			else if(i == 14)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,855,380,0,0.3);
-			else if(i == 15)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,950,380,0,0.3);
-			else if(i == 16)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,820,380,0,0.3);
-			else if(i == 17)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,50,200,0,0.3);
-			else if(i == 18)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,342,200,0,0.3);
-			else if(i == 19)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,440,200,0,0.3);
-			else if(i == 20)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,540,200,0,0.3);
-			else if(i == 21)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,635,200,0,0.3);
-			else if(i == 22)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,950,200,0,0.3);
-			else if(i == 23)
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,930,200,0,0.3);
-			else
-				this.ladrillos[i] = new BloquesLadrillos(this.pared,950,570,0,0.3);
-		}
+		int contadorP1 = 0;
+		int contadorP2 = 0;
+		for(int i = 0;i<this.ladrillos.length; i++) {
+            if(i<=23) {
+            	this.ladrillos[i] = new BloquesLadrillos(this.pared,45*i,380,0,0.3);
+            }
+            if(i>=24 && i<=46) {
+            	this.ladrillos[i] = new BloquesLadrillos(this.pared,45*contadorP1,570,0,0.3);
+            	contadorP1 ++;
+            }
+            if(i>=46) {
+            	this.ladrillos[i] = new BloquesLadrillos(this.pared,45*contadorP2,200,0,0.3);
+            	contadorP2 ++;
+            }
+        }
 		this.acero = new BloquesAcero[5];
 		for (int j = 0; j < this.acero.length; j++) {
 			if(j == 0)
@@ -124,6 +85,20 @@ public class Juego extends InterfaceJuego {
 	 * del TP para mayor detalle).
 	 */
 	public void tick() {
+		 if (menu.estaEnMenu()) {
+	            menu.dibujarFondo(entorno); // Dibuja el fondo antes de los elementos del menú
+	            menu.dibujarTitulo(entorno); // Dibuja el titulo del juego 
+	            menu.dibujarElementosMenu(entorno); // Agrega las opciones del juego
+
+	            // Escucha las teclas para cambiar al estado de juego principal
+	            if (this.entorno.estaPresionada(this.entorno.TECLA_ENTER)) {
+	                menu.cambiarEstado();
+	            }
+	            // Verifica si se presiona la tecla "Escape" para cerrar el programa
+	            if (this.entorno.estaPresionada(this.TECLA_ESCAPE)) {
+	                System.exit(0); // Cierra el programa
+	            }
+	        } else
 		if (menu.estaEnMenu()) {
             menu.dibujarFondo(entorno); // Dibuja el fondo antes de los elementos del menú
             menu.dibujarTitulo(entorno); // Dibuja el titulo del juego 
@@ -337,7 +312,7 @@ public class Juego extends InterfaceJuego {
 							this.elizabeth = new Elizabeth(this.reina ,500, 500, 0, 0.3,0, direccion);
 						}
 					}			
-			}	
+			}
         }		
 	}
 		//---fin del tick()---
