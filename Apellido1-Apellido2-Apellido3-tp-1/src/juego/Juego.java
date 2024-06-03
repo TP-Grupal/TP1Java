@@ -39,7 +39,7 @@ public class Juego extends InterfaceJuego {
 		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, " Super Elizabeth Sis, Volcano Edition - Grupo ... - v1", 1000, 600);
 		
-		this.ladrillos = new BloquesLadrillos[69];
+		this.ladrillos = new BloquesLadrillos[71];
 		
 		// Inicializar lo que haga falta para el juego
 		this.elizabeth = new Elizabeth(this.reina ,500, 500, 0, 0.3,0, direccion);
@@ -51,14 +51,14 @@ public class Juego extends InterfaceJuego {
 		int contadorP1 = 0;
 		int contadorP2 = 0;
 		for(int i = 0;i<this.ladrillos.length; i++) {
-            if(i<=23) {
+            if(i<=24) {
             	this.ladrillos[i] = new BloquesLadrillos(this.pared,45*i,380,0,0.3);
             }
-            if(i>=24 && i<=46) {
+            if(i>=25 && i<=47) {
             	this.ladrillos[i] = new BloquesLadrillos(this.pared,45*contadorP1,570,0,0.3);
             	contadorP1 ++;
             }
-            if(i>=46) {
+            if(i>=48) {
             	this.ladrillos[i] = new BloquesLadrillos(this.pared,45*contadorP2,200,0,0.3);
             	contadorP2 ++;
             }
@@ -146,13 +146,6 @@ public class Juego extends InterfaceJuego {
 				}
 			}
 			
-			//--------
-			if(this.entorno.sePresiono(this.entorno.TECLA_IZQUIERDA) || 
-					this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA)){
-				//if(up() == true && saltar() == true)
-				//	this.elizabeth.moverY();
-			}
-			
 			//creo el rayo para la princesa
 			
 			if(entorno.sePresiono(entorno.TECLA_ESPACIO) && (entorno.sePresiono(entorno.TECLA_DERECHA) 
@@ -207,22 +200,40 @@ public class Juego extends InterfaceJuego {
 					saltoActivo = false;
 			    }
 			}
+			for(int i = 0; i < this.acero.length; i++) {				
+				if(this.acero[i] != null &&
+				   this.elizabeth.getY() >= this.acero[i].getY() - this.acero[i].getAlto() &&
+				   this.elizabeth.getY() <= this.acero[i].getY() + this.acero[i].getAlto() -20 &&
+				   this.elizabeth.getX() >= this.acero[i].getX() - this.acero[i].getAncho() &&
+				   this.elizabeth.getX() <= this.acero[i].getX() + this.acero[i].getAncho()) {	
+					swichP = false;	
+					saltoActivo = false;
+			     }
+		    }
 			if(swichP == true) {
 				this.elizabeth.gravedadPrincesa();
 			}
-			//Romper bloques
+			//Romper bloques y rebotes
 			for(int i = 0; i < this.ladrillos.length; i++) {				
 				if(this.ladrillos[i] != null &&
 				   this.elizabeth.getY()  <= this.ladrillos[i].getY() + this.ladrillos[i].getAlto()&&
 			       this.elizabeth.getY()  >= this.ladrillos[i].getY() + this.ladrillos[i].getAlto()- 20 &&
 				   this.elizabeth.getX() >= this.ladrillos[i].getX() - this.ladrillos[i].getAncho()&&
-				   this.elizabeth.getX() <= this.ladrillos[i].getX() + this.ladrillos[i].getAncho()) {
-					
+				   this.elizabeth.getX() <= this.ladrillos[i].getX() + this.ladrillos[i].getAncho()) {	
 					this.ladrillos[i] = null;
 					this.pasoSalto = 0;
 			    }
 		   }
-			
+			for(int i = 0; i < this.acero.length; i++) {				
+				if(this.acero[i] != null &&
+				   this.elizabeth.getY()  <= this.acero[i].getY() + this.acero[i].getAlto()&&
+			       this.elizabeth.getY()  >= this.acero[i].getY() + this.acero[i].getAlto()- 20 &&
+				   this.elizabeth.getX() >= this.acero[i].getX() - this.acero[i].getAncho()&&
+				   this.elizabeth.getX() <= this.acero[i].getX() + this.acero[i].getAncho()) {
+					this.pasoSalto = 0;
+			    }
+		   }
+			//salto
 			if(this.entorno.sePresiono(TECLA_X) &&  saltoActivo == false) {
 				saltoActivo = true;
 				this.pasoSalto = 40;	
@@ -235,7 +246,7 @@ public class Juego extends InterfaceJuego {
 			
 			this.dinosaurio.mover();
 			boolean swich = true;
-			if (this.dinosaurio.getX() <= 0 +  dinosaurio.getAncho()/2 || this.dinosaurio.getX() >= 1000 - dinosaurio.getAncho() ) {
+			if (this.dinosaurio.getX() <= 0 +  this.dinosaurio.getAncho() || this.dinosaurio.getX() >= 1000 - this.dinosaurio.getAncho() ) {
 				this.dinosaurio.rebotar();		
 			}
 			if(this.dinosaurio.vivo() == true) {			
@@ -299,16 +310,17 @@ public class Juego extends InterfaceJuego {
 			        rayoDinosaurio[i].moverDerecha(); // Aquí se ajusta el movimiento del rayo
 			        if(!hayRayo(rayoDinosaurio[i])) {
 			            rayoDinosaurio[i] = null;
-			            //this.hayRayo= false;
+			            this.hayRayo= false;
 			        }
 			    }
 			}
+			//colision muertes
 				for(int i = 0;i<this.rayoDinosaurio.length; i++) {
 					if(this.rayoDinosaurio[i] != null) {
 						if(this.rayoDinosaurio[i].getX() >= this.elizabeth.getX() - this.elizabeth.getAncho() &&
 							this.rayoDinosaurio[i].getX() <= this.elizabeth.getX() + this.elizabeth.getAncho() &&
-							this.rayoDinosaurio[i].getY() >= this.elizabeth.getY() - this.elizabeth.getAlto() &&
-							this.rayoDinosaurio[i].getY() <= this.elizabeth.getY() + this.elizabeth.getAlto()) {
+							this.rayoDinosaurio[i].getY() >= this.elizabeth.getY() - this.elizabeth.getAlto()  &&
+							this.rayoDinosaurio[i].getY() <= this.elizabeth.getY() + this.elizabeth.getAlto()-50) {
 							this.elizabeth = new Elizabeth(this.reina ,500, 500, 0, 0.3,0, direccion);
 						}
 					}			
