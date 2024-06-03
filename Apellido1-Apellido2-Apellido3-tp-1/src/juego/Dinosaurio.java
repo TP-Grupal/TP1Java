@@ -13,21 +13,24 @@ public class Dinosaurio {
 	private double alto;
 	private int velocidad;
 	private int gravedad;
+	private double diametro;
+	private double angulo;
 	
 	//imagen disparo
 	
 	//movimiento dinosaurio
 	public boolean movimientoDinosaurio;
 	
-	public Dinosaurio(Image img,int x, int y, double ancho, double alto,int velocidad) {
+	public Dinosaurio(Image img,int x, int y, double angulo, double diametro,int velocidad) {
 		this.img = Herramientas.cargarImagen("Imagenes\\dino-2.png");
 		this.x = x;
 		this.y = y;
-		this.ancho = ancho;
-		this.alto = alto;
+		this.angulo = angulo;
+		this.diametro = diametro;
 		this.velocidad = velocidad;
-		this.gravedad = 6;
-		
+		this.gravedad = 24;
+		this.alto = 70;
+		this.ancho = 50;
 	}
 	
 	public void mover()
@@ -38,7 +41,7 @@ public class Dinosaurio {
 	//dibujo dinosaurio
 	public void dibujarImg(Entorno entorno)
 	{
-		entorno.dibujarImagen(this.img,this.x, this.y, this.ancho, this.alto);
+		entorno.dibujarImagen(this.img,this.x, this.y, this.angulo, this.diametro);
 	}
 
 	public int getX() {
@@ -93,9 +96,9 @@ public class Dinosaurio {
 	        rayoX = this.x; // es para que salaga el rayo desde el lado izquierdo del dinosaurio
 	        direccionRayo = -5; // direccion izquierda
 	    }
-	    int rayoY = (int) (this.y + (this.alto / 2)); // el rayo sale desde adentro del dinosaurio
+	    int rayoY = (int) (this.y + (this.alto / 8)); // el rayo sale desde adentro del dinosaurio
 
-	    return new Rayo(bolaDinosaurio, rayoX, rayoY, 0, 0.1, direccionRayo);
+	    return new Rayo(bolaDinosaurio, rayoX, rayoY, 0, 0.05, direccionRayo);
 	}
 
 	public int getVelocidad() {
