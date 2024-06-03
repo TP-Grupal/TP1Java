@@ -90,9 +90,40 @@ public class Juego extends InterfaceJuego {
 	            menu.dibujarFondo(entorno); // Dibuja el fondo antes de los elementos del menú
 	            menu.dibujarTitulo(entorno); // Dibuja el titulo del juego 
 	            menu.dibujarElementosMenu(entorno); // Agrega las opciones del juego
-
+	            
+	           
 	            // Escucha las teclas para cambiar al estado de juego principal
 	            if (this.entorno.estaPresionada(this.entorno.TECLA_ENTER)) {
+	            	 this.elizabeth = new Elizabeth(this.reina ,500, 500, 0, 0.3,0, direccion);
+	 	    		this.dinosaurio = new Dinosaurio(this.dino,500,100,0,0.4,2);
+	 	    		
+	 	    		int contadorP1 = 0;
+	 	    		int contadorP2 = 0;
+	 	    		for(int i = 0;i<this.ladrillos.length; i++) {
+	 	                if(i<=24) {
+	 	                	this.ladrillos[i] = new BloquesLadrillos(this.pared,45*i,380,0,0.3);
+	 	                }
+	 	                if(i>=25 && i<=47) {
+	 	                	this.ladrillos[i] = new BloquesLadrillos(this.pared,45*contadorP1,570,0,0.3);
+	 	                	contadorP1 ++;
+	 	                }
+	 	                if(i>=48) {
+	 	                	this.ladrillos[i] = new BloquesLadrillos(this.pared,45*contadorP2,200,0,0.3);
+	 	                	contadorP2 ++;
+	 	                }
+	 	            }
+	 	    		this.acero = new BloquesAcero[5];
+	 	    		for (int j = 0; j < this.acero.length; j++) {
+	 	    			if(j == 0)
+	 	    				this.acero[j] = new BloquesAcero(this.pared,385,380,0,0.24);
+	 	    			else if(j == 1)
+	 	    				this.acero[j] = new BloquesAcero(this.pared,675,380,0,0.24);
+	 	    			else if(j == 2)
+	 	    				this.acero[j] = new BloquesAcero(this.pared,195,200,0,0.24);
+	 	    			else
+	 	    				this.acero[j] = new BloquesAcero(this.pared,780,200,0,0.24);
+	 	    		}
+
 	                menu.cambiarEstado();
 	            }
 	            // Verifica si se presiona la tecla "Escape" para cerrar el programa
@@ -127,22 +158,49 @@ public class Juego extends InterfaceJuego {
 			for(int i = 0; i < this.acero.length; i++) {
 				this.acero[i].dibujarImg(this.entorno);
 			}
+			// Se fija que la proncesa no golpee el costado de un bloque
+			boolean golpe = false;
+			for(int i = 0; i < this.ladrillos.length; i++) {				
+				if(this.ladrillos[i] != null &&
+				   this.elizabeth.getY() >= this.ladrillos[i].getY() - this.ladrillos[i].getAlto() / 2 &&
+				   this.elizabeth.getY() <= this.ladrillos[i].getY() + this.ladrillos[i].getAlto() / 2&&
+				   this.elizabeth.getX() >= this.ladrillos[i].getX() - this.ladrillos[i].getAncho() &&
+				   this.elizabeth.getX() <= this.ladrillos[i].getX() + this.ladrillos[i].getAncho()) {	
+					golpe = true;
+			    }
+			}
+			for(int i = 0; i < this.acero.length; i++) {				
+				if(this.acero[i] != null &&
+				   this.elizabeth.getY() >= this.acero[i].getY() - this.acero[i].getAlto() / 2 &&
+				   this.elizabeth.getY() <= this.acero[i].getY() + this.acero[i].getAlto() / 2&&
+				   this.elizabeth.getX() >= this.acero[i].getX() - this.acero[i].getAncho() &&
+				   this.elizabeth.getX() <= this.acero[i].getX() + this.acero[i].getAncho()) {	
+					golpe = true;
+			    }
+			}
 			
+			//Mueve a la princesa 
 			if(this.entorno.estaPresionada(this.entorno.TECLA_DERECHA) && 
-					this.elizabeth.getX() + this.elizabeth.getAncho() /2 < this.entorno.ancho())
+			   this.elizabeth.getX() + this.elizabeth.getAncho() /2 < this.entorno.ancho() &&
+			   golpe != true) {
 				this.elizabeth.moverDerecha();
+			}
 			if(this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA) && 
-					this.elizabeth.getX() + this.elizabeth.getAncho() /2 > 45)
+			   this.elizabeth.getX() + this.elizabeth.getAncho() /2 > 45 &&
+			   golpe != true) {
 				this.elizabeth.moverIzquierda();
+		    }
 			
-			//guarda la última dirección de Elizabeth para saber hacia dónde disparar el rayo
+			//guarda la última dirección de Elizabeth para saber hacia dónde disparar el rayo	
 			if(entorno.sePresiono(entorno.TECLA_DERECHA) || entorno.estaPresionada(entorno.TECLA_DERECHA)) {
 				if(this.hayRayo == false) {
+					System.out.println("a");
 					this.elizabeth.setUltDirec(1);
 				}
 			}
 			else if(entorno.sePresiono(entorno.TECLA_IZQUIERDA) || entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
 				if(this.hayRayo == false) {
+					System.out.println("b");
 					this.elizabeth.setUltDirec(2);
 				}
 			}
@@ -189,6 +247,8 @@ public class Juego extends InterfaceJuego {
 					}
 				}
 			}
+			
+			//Creo el salto verificando que toque el piso (la gravedad este desactivada)
 			boolean swichP = this.pasoSalto == 0;
 			boolean saltoActivo = true;
 			for(int i = 0; i < this.ladrillos.length; i++) {				
@@ -214,7 +274,8 @@ public class Juego extends InterfaceJuego {
 			if(swichP == true) {
 				this.elizabeth.gravedadPrincesa();
 			}
-			//Romper bloques y rebotes
+			
+			//Romper bloques y rebotes (y reduzco el salto si se choca cun un bloque en la parte superior)
 			for(int i = 0; i < this.ladrillos.length; i++) {				
 				if(this.ladrillos[i] != null &&
 				   this.elizabeth.getY()  <= this.ladrillos[i].getY() + this.ladrillos[i].getAlto()&&
@@ -234,7 +295,7 @@ public class Juego extends InterfaceJuego {
 					this.pasoSalto = 0;
 			    }
 		   }
-			//this.elizabeth.setUltDirec()
+			
 			//salto
 			if(this.entorno.sePresiono(TECLA_X) &&  saltoActivo == false) {
 				saltoActivo = true;
@@ -244,13 +305,14 @@ public class Juego extends InterfaceJuego {
 				this.elizabeth.saltar2();
 				this.pasoSalto--;	
 			}
-			// ** parte del dinosaurio **
-			
-			this.dinosaurio.mover();
-			boolean swich = true;
+			// ** DINOSAURIO **
+			//Muevo al dinosaurio
+			this.dinosaurio.mover();			
 			if (this.dinosaurio.getX() <= 0 +  this.dinosaurio.getAncho() || this.dinosaurio.getX() >= 1000 - this.dinosaurio.getAncho() ) {
 				this.dinosaurio.rebotar();		
 			}
+			//Aplico gravedad al dinosaurio
+			boolean swich = true;
 			if(this.dinosaurio.vivo() == true) {			
 				for(int i = 0; i < this.ladrillos.length; i++) {				
 					if(this.ladrillos[i] != null &&
@@ -316,14 +378,14 @@ public class Juego extends InterfaceJuego {
 			        }
 			    }
 			}
-			//colision muertes
+			//colision muerte princesa 
 				for(int i = 0;i<this.rayoDinosaurio.length; i++) {
 					if(this.rayoDinosaurio[i] != null) {
 						if(this.rayoDinosaurio[i].getX() >= this.elizabeth.getX() - this.elizabeth.getAncho() &&
 							this.rayoDinosaurio[i].getX() <= this.elizabeth.getX() + this.elizabeth.getAncho() &&
 							this.rayoDinosaurio[i].getY() >= this.elizabeth.getY() - this.elizabeth.getAlto()  &&
 							this.rayoDinosaurio[i].getY() <= this.elizabeth.getY() + this.elizabeth.getAlto()-50) {
-							this.elizabeth = new Elizabeth(this.reina ,500, 500, 0, 0.3,0, direccion);
+							menu.cambiarEstado();
 						}
 					}			
 			}
