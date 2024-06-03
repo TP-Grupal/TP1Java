@@ -18,7 +18,8 @@ public class Juego extends InterfaceJuego {
 	private Image reina;
 	private Image dino;
 	private int direccion;
-	boolean hayRayo;
+	boolean hayRayo = false;
+	boolean hayRayoDino;
 	public char TECLA_X = 88;
 	private BloquesLadrillos[] ladrillos;
 	private BloquesAcero[] acero;
@@ -233,6 +234,7 @@ public class Juego extends InterfaceJuego {
 					this.pasoSalto = 0;
 			    }
 		   }
+			//this.elizabeth.setUltDirec()
 			//salto
 			if(this.entorno.sePresiono(TECLA_X) &&  saltoActivo == false) {
 				saltoActivo = true;
@@ -300,7 +302,7 @@ public class Juego extends InterfaceJuego {
 			        rayoDinosaurio[i].moverIzquierda();
 			        if(!hayRayo(rayoDinosaurio[i])) {
 			            rayoDinosaurio[i] = null;
-			            this.hayRayo= false;
+			            this.hayRayoDino= false;
 			        }
 			    }
 			}
@@ -310,7 +312,7 @@ public class Juego extends InterfaceJuego {
 			        rayoDinosaurio[i].moverDerecha(); // Aquí se ajusta el movimiento del rayo
 			        if(!hayRayo(rayoDinosaurio[i])) {
 			            rayoDinosaurio[i] = null;
-			            this.hayRayo= false;
+			            this.hayRayoDino= false;
 			        }
 			    }
 			}
