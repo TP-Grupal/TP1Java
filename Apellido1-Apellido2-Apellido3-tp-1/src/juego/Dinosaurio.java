@@ -85,20 +85,24 @@ public class Dinosaurio {
 	//bola del dinosaurio
 
 	public Rayo dispararDinosaurio() {
-	    Image bolaDinosaurio = Herramientas.cargarImagen("Imagenes\\bola.png");
+	   Image bolaDinosaurio = Herramientas.cargarImagen("Imagenes\\bola.png");
+	   Image bolaDinosaurio2 = Herramientas.cargarImagen("Imagenes\\bola-2.png");
 	    
 	    int rayoX; //es la posicion desde donde sale el rayo
+	    int rayoY = (int) this.y; //(this.y + (this.alto / 8)); // el rayo sale desde adentro del dinosaurio
 	    int direccionRayo; // direccion del rayo
 	    if (this.velocidad < 0) {
 	        rayoX = (int) (this.x + this.ancho); // es para que salga el rayo desde el lado derecho del dinosaurio
 	        direccionRayo = 5; // direccion derecha
+	        return new Rayo(bolaDinosaurio2, rayoX, rayoY, 0, 0.09, direccionRayo);
 	    } else {
 	        rayoX = this.x; // es para que salaga el rayo desde el lado izquierdo del dinosaurio
 	        direccionRayo = -5; // direccion izquierda
+	        return new Rayo(bolaDinosaurio, rayoX, rayoY, 0, 0.09, direccionRayo);
 	    }
-	    int rayoY = (int) (this.y + (this.alto / 8)); // el rayo sale desde adentro del dinosaurio
+	    //rayoY = (int) (this.y + (this.alto / 8)); // el rayo sale desde adentro del dinosaurio
 
-	    return new Rayo(bolaDinosaurio, rayoX, rayoY, 0, 0.05, direccionRayo);
+	    //return new Rayo(bolaDinosaurio, rayoX, rayoY, 0, 0.09, direccionRayo);
 	}
 
 	public int getVelocidad() {
