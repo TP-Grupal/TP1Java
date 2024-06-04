@@ -389,6 +389,33 @@ public class Juego extends InterfaceJuego {
 						}
 					}			
 			}
+			//colision rayo y bola de fuego
+				for(int i = 0;i<this.rayoDinosaurio.length; i++) {
+					for (int j = 0; j < this.rayoElizabeth.length; j++) {
+						if(this.rayoDinosaurio[i] != null && this.rayoElizabeth[j] != null) {
+							if(this.rayoDinosaurio[i].getX() + this.rayoDinosaurio[i].getAncho() >= this.rayoElizabeth[j].getX() - this.rayoElizabeth[j].getAncho() &&
+									this.rayoDinosaurio[i].getX() - this.rayoDinosaurio[i].getAncho() <= this.rayoElizabeth[j].getX() + this.rayoElizabeth[j].getAncho() &&
+									this.rayoDinosaurio[i].getY() + this.rayoDinosaurio[i].getAlto() >= this.rayoElizabeth[j].getY() - this.rayoElizabeth[j].getAlto() &&
+									this.rayoDinosaurio[i].getY() - this.rayoDinosaurio[i].getAlto() <= this.rayoElizabeth[j].getY() + this.rayoElizabeth[j].getAlto()) {
+								this.rayoDinosaurio[i] = null;
+								this.rayoElizabeth[j] = null;
+						}
+					}else if(this.rayoElizabeth[j] == null){
+						this.hayRayo = false;
+					}
+				}
+			}
+			//Colision rayo con dinosaurio !revisar tira error¡
+			for (int j = 0; j < this.rayoElizabeth.length; j++) {
+					if(this.rayoElizabeth[j] != null && this.dinosaurio != null)
+						if (this.rayoElizabeth[j].getX() >= this.dinosaurio.getX() - this.dinosaurio.getAncho() &&
+							this.rayoElizabeth[j].getX() <= this.dinosaurio.getX() + this.dinosaurio.getAncho() &&
+							this.rayoElizabeth[j].getY() >= this.dinosaurio.getY() - this.dinosaurio.getAlto()  &&
+							this.rayoElizabeth[j].getY() <= this.dinosaurio.getY() + this.dinosaurio.getAlto()-50) {
+							this.dinosaurio = null;
+							this.rayoElizabeth[j] = null;
+						}
+				}
         }		
 	}
 		//---fin del tick()---
